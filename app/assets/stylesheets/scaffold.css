@@ -78,3 +78,19 @@ div.actions {
 label {
   display: block;
 }
+
+table {
+    width: 800px;
+}
+
+table td {
+    min-width: 100px;
+}
+
+table tr {
+    text-align: left;
+}
+
+.capture-btn {
+    font-size: large;
+}

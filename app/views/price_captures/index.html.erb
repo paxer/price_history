@@ -1,7 +1,16 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Price Captures</h1>
+
+<%= render 'form', price_capture: PriceCapture.new %>
+
 <% if @price_captures.present? %>
+  <br>
+  <%= link_to 'All', price_captures_path %> |
+  <%= link_to 'Only BTC', price_captures_path(cryptocurrency_code: 'BTC') %> |
+  <%= link_to 'Only ETH', price_captures_path(cryptocurrency_code: 'ETH') %> |
+  <br>
+  <br>
   <table>
     <thead>
     <tr>
@@ -19,7 +28,7 @@
       <tr>
         <td><%= price_capture.bid %></td>
         <td><%= price_capture.ask %></td>
-        <td><%= price_capture.capture_time.to_formatted_s(:long) %></td>
+        <td><%= price_capture.capture_time.to_formatted_s(:db) %></td>
         <td><%= price_capture.cryptocurrency_code %></td>
         <td><%= price_capture.currency_code %></td>
       </tr>
@@ -27,8 +36,4 @@
     </tbody>
   </table>
 <% end %>
-<br>
-
-<%= render 'form', price_capture: @price_capture || PriceCapture.new %>
-
 

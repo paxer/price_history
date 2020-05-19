@@ -30,13 +30,13 @@ RSpec.describe 'price_captures/index', type: :view do
       assert_select 'tr>td', text: '10.99', count: 1
       assert_select 'tr>td', text: 'BTC', count: 1
       assert_select 'tr>td', text: 'AUD', count: 1
-      assert_select 'tr>td', text: 'February 03, 2020 04:05', count: 1
+      assert_select 'tr>td', text: '2020-02-03 04:05:00', count: 1
 
       assert_select 'tr>td', text: '19.99', count: 1
       assert_select 'tr>td', text: '29.99', count: 1
       assert_select 'tr>td', text: 'ETH', count: 1
       assert_select 'tr>td', text: 'USD', count: 1
-      assert_select 'tr>td', text: 'February 03, 2020 04:06', count: 1
+      assert_select 'tr>td', text: '2020-02-03 04:06:00', count: 1
     end
   end
 
