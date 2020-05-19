@@ -4,6 +4,9 @@ Metrics/LineLength:
 Documentation:
   Enabled: false
 
+Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context']
+
 AllCops:
   Exclude:
     - 'config/routes.rb'

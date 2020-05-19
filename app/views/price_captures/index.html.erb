@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Price Captures</h1>
+<% if @price_captures.present? %>
+  <table>
+    <thead>
+    <tr>
+      <th>Bid</th>
+      <th>Ask</th>
+      <th>Capture time</th>
+      <th>Cryptocurrency code</th>
+      <th>Currency code</th>
+      <th colspan="3"></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @price_captures.each do |price_capture| %>
+      <tr>
+        <td><%= price_capture.bid %></td>
+        <td><%= price_capture.ask %></td>
+        <td><%= price_capture.capture_time.to_formatted_s(:long) %></td>
+        <td><%= price_capture.cryptocurrency_code %></td>
+        <td><%= price_capture.currency_code %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+<br>
+
+<%= render 'form', price_capture: @price_capture || PriceCapture.new %>
+
+
