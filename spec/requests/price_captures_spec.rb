@@ -8,22 +8,65 @@ RSpec.describe '/price_captures', type: :request do
   end
 
   describe 'GET /index' do
-    it 'renders a successful response' do
-      PriceCapture.create!(valid_params)
+    let!(:btc) do
+      PriceCapture.create!(
+        bid: 1.22,
+        ask: 2.22,
+        capture_time: DateTime.now,
+        cryptocurrency_code: 'BTC',
+        currency_code: 'AUD'
+      )
+    end
+
+    let!(:eth) do
+      PriceCapture.create!(
+        bid: 2.22,
+        ask: 3.22,
+        capture_time: DateTime.now,
+        cryptocurrency_code: 'ETH',
+        currency_code: 'AUD'
+      )
+    end
+
+    it 'renders all currencies ordered by capture_time desc' do
       get price_captures_path
       expect(response).to be_successful
+      expect(assigns(:price_captures)).to eq(PriceCapture.order(capture_time: :desc))
+    end
+
+    it 'filters by crypto currency code ETH' do
+      get price_captures_path, params: { cryptocurrency_code: 'BTC' }
+      expect(response).to be_successful
+      expect(assigns(:price_captures).size).to eq(1)
+      expect(assigns(:price_captures).first).to eq(btc)
+    end
+
+    it 'filters by crypto currency code' do
+      get price_captures_path, params: { cryptocurrency_code: 'ETH' }
+      expect(response).to be_successful
+      expect(assigns(:price_captures).size).to eq(1)
+      expect(assigns(:price_captures).first).to eq(eth)
     end
   end
 
   describe 'POST /create' do
-    it 'creates a new PriceCapture' do
-      expect do
-        post price_captures_path, params: valid_params
-      end.to change(PriceCapture, :count).by(1)
+    let(:data_source) { double DataSource }
+
+    before do
+      expect(DataSource).to receive(:all).and_return([data_source])
     end
 
-    it 'redirects to the created price_capture' do
+    it 'invokes CapturePrice twice and redirect on success' do
+      expect(CapturePrice).to receive(:call).with(data_source: data_source).and_return(double(success?: true))
       post price_captures_path, params: valid_params
+      expect(flash[:notice]).to match(/Price was successfully captured/)
+      expect(response).to redirect_to(price_captures_path)
+    end
+
+    it 'invokes CapturePrice twice and redirect on error' do
+      expect(CapturePrice).to receive(:call).with(data_source: data_source).and_return(double(success?: false, error: 'Error Message'))
+      post price_captures_path, params: valid_params
+      expect(flash[:alert]).to match(/Price capture error: Error Message/)
       expect(response).to redirect_to(price_captures_path)
     end
   end
