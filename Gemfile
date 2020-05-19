@@ -15,6 +15,7 @@ gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
 
 group :development, :test do
+  gem 'rails-controller-testing'
   gem 'rspec-rails'
 end
 
